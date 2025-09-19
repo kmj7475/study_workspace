@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
 import lombok.Data;
 
 @Data
@@ -27,6 +29,7 @@ public class OrderDetails {
   @Column(name = "purchase_amount")
   private Long purchaseAmount; // 구매금액
 
-  @Column(name = "order_no")
-  private Long orderNo; // 주문번호
+  @ManyToOne
+  @JoinColumn(name = "order_no")
+  private Order order;
 }
