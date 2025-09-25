@@ -3,6 +3,8 @@ package com.example.demo.domain;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +22,7 @@ import lombok.Data;
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(length = 6, nullable = false)
+    @Column(name = "book_no", length = 6, nullable = false)
     private Integer bookNo;
 
     @Column(length = 100)
@@ -36,6 +38,7 @@ public class Book {
     private String price;
 
     @Column(columnDefinition = "DATE DEFAULT SYSDATE")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date publishDate;
 
     @Column(length = 100)
@@ -50,11 +53,8 @@ public class Book {
     @Column(length = 50)
     private String isbn;
 
-    @Column(length = 6)
-    private Integer empNo;
-
     @ManyToOne
-    @JoinColumn(name = "emp_no", referencedColumnName = "emp_no")
+    @JoinColumn(name = "emp_no")
     private Employee employee;
 
     @OneToMany(mappedBy = "book")
