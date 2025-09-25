@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
 
 @Data
@@ -15,11 +17,13 @@ public class Cart {
   @Column(name = "cart_no", nullable = false)
   private Long cartNo; // 장바구니번호
 
-  @Column(name = "member_no", nullable = false)
-  private Long memberNo; // 회원번호
+  @OneToOne
+  @JoinColumn(name = "member_no", referencedColumnName = "member_no", nullable = false)
+  private Member member; // 회원
 
-  @Column(name = "book_no", nullable = false)
-  private Long bookNo; // 책고유번호
+  @OneToOne
+  @JoinColumn(name = "book_no", referencedColumnName = "book_no", nullable = false)
+  private Book book; // 책
 
   @Column(name = "quantity", nullable = false)
   private Long quantity; // 선택수량

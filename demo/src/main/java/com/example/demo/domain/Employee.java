@@ -1,10 +1,12 @@
 package com.example.demo.domain;
 
+import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -13,10 +15,13 @@ import lombok.Data;
 @Data
 public class Employee {
     @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(length = 6, nullable = false)
     private Integer empNo;
 
     @Column(length = 100)
     private String empName;
+
+    @OneToMany(mappedBy = "employee")
+    private List<Book> books;
 }
