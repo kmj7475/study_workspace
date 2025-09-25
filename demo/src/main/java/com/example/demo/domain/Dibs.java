@@ -16,10 +16,7 @@ public class Dibs {
     @Column(length = 6, nullable = false)
     private int memberNo;
 
-    @Column(length = 10, nullable = false)
-    private int bookNo;
-
     @ManyToOne
-    @JoinColumn(name = "book_no", referencedColumnName = "bookNo", insertable = false, updatable = false)
+    @JoinColumn(name = "book_no", insertable = false, updatable = false)
     private Book book;
 }

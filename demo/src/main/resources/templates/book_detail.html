@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>도서 상세</title>
+</head>
+<body>
+    <h1>도서 상세</h1>
+    <div th:if="${book != null}">
+        <p>번호: <span th:text="${book.bookNo}"></span></p>
+        <p>도서명: <span th:text="${book.bookName}"></span></p>
+        <p>저자: <span th:text="${book.author}"></span></p>
+        <p>출판사: <span th:text="${book.company}"></span></p>
+        <p>가격: <span th:text="${book.price}"></span></p>
+        <p>출판일: <span th:text="${book.publishDate}"></span></p>
+        <p>카테고리: <span th:text="${book.category}"></span></p>
+        <p>설명: <span th:text="${book.about}"></span></p>
+        <p>이미지: <span th:text="${book.image}"></span></p>
+        <p>ISBN: <span th:text="${book.isbn}"></span></p>
+        <a th:href="@{'/books/' + ${book.bookNo} + '/edit'}">수정</a>
+        <form th:action="@{'/books/' + ${book.bookNo}}" method="post" th:object="${book}">
+            <input type="hidden" name="_method" value="delete"/>
+            <button type="submit">삭제</button>
+        </form>
+    </div>
+    <a th:href="@{/books}">목록으로</a>
+</body>
+</html>
