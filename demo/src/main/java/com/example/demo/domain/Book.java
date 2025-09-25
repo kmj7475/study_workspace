@@ -1,6 +1,7 @@
 package com.example.demo.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,6 +9,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 
 @Entity
@@ -48,5 +52,11 @@ public class Book {
 
     @Column(length = 6)
     private Integer empNo;
+
+    @ManyToOne
+    @JoinColumn(name = "emp_no", referencedColumnName = "emp_no")
+    private Employee employee;
+
+    @OneToMany(mappedBy = "book")
+    private List<Dibs> dibsList;
 }
-  
