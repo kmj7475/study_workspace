@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>도서 목록</title>
+</head>
+<body>
+    <h1>도서 목록</h1>
+    <form th:action="@{/books}" method="get">
+        <input type="text" name="bookName" placeholder="도서명" th:value="${book?.bookName}" />
+        <input type="text" name="author" placeholder="저자" th:value="${book?.author}" />
+        <input type="text" name="company" placeholder="출판사" th:value="${book?.company}" />
+        <input type="text" name="price" placeholder="가격" th:value="${book?.price}" />
+        <input type="text" name="category" placeholder="카테고리" th:value="${book?.category}" />
+        <input type="text" name="about" placeholder="설명" th:value="${book?.about}" />
+        <input type="text" name="image" placeholder="이미지" th:value="${book?.image}" />
+        <input type="text" name="isbn" placeholder="ISBN" th:value="${book?.isbn}" />
+        <button type="submit">검색</button>
+    </form>
+    <a th:href="@{/books/new}">도서 등록</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>도서명</th>
+                <th>저자</th>
+                <th>출판사</th>
+                <th>가격</th>
+                <th>카테고리</th>
+                <th>상세</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="book : ${books}">
+                <td th:text="${book.bookNo}"></td>
+                <td th:text="${book.bookName}"></td>
+                <td th:text="${book.author}"></td>
+                <td th:text="${book.company}"></td>
+                <td th:text="${book.price}"></td>
+                <td th:text="${book.category}"></td>
+                <td>
+                    <a th:href="@{'/books/' + ${book.bookNo}}">상세</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
