@@ -11,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.CascadeType;
 import lombok.Data;
 
@@ -18,33 +20,37 @@ import lombok.Data;
 @Entity
 @Table(name = "orders")
 public class Order {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long orderNo;
-    @Column(length = 100, nullable = false)
-    private String receiverName;
-    @Column(length = 100, nullable = false, unique = true)
-    private String receiverAddr;
-    @Column(length = 20, nullable = false)
-    private Date orderDate;
-    @Column(length = 10, nullable = false)
-    private String orderStatus;
-    @Column(length = 10, nullable = false)
-    private long orderTotal;
-    @Column(length = 10, nullable = false)
-    private long usedPoint;
-    @Column(length = 10, nullable = false)
-    private long paymentTotal;
-    @Column(length = 20, nullable = false)
-    private String phone;
-    @Column(length = 10, nullable = false)
-    private long memberNo;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "order_no")
+  private Long orderNo;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderDetails> orderDetailsList = new ArrayList<>();
+  @Column(length = 100, nullable = false)
+  private String receiverName;
+  @Column(length = 100, nullable = false, unique = true)
+  private String receiverAddr;
+  @Column(length = 20, nullable = false)
+  private Date orderDate;
+  @Column(length = 10, nullable = false)
+  private String orderStatus;
+  @Column(length = 10, nullable = false)
+  private long orderTotal;
+  @Column(length = 10, nullable = false)
+  private long usedPoint;
+  @Column(length = 10, nullable = false)
+  private long paymentTotal;
+  @Column(length = 20, nullable = false)
+  private String phone;
 
-    public void addDetail(OrderDetails detail) {
-        orderDetailsList.add(detail);
-        detail.setOrder(this);
-    }
+  @OneToOne
+  @JoinColumn(name = "member_no", referencedColumnName = "member_no", nullable = false)
+  private Member member;
+
+  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<OrderDetails> orderDetailsList = new ArrayList<>();
+
+  public void addDetail(OrderDetails detail) {
+    orderDetailsList.add(detail);
+    detail.setOrder(this);
+  }
 }

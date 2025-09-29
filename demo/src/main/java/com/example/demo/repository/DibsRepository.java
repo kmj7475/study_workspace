@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.domain.Dibs;
 
 @Repository
-public interface DibsRepository extends JpaRepository<Dibs, Long> {
+public interface DibsRepository extends JpaRepository<Dibs, Integer> {
 }
