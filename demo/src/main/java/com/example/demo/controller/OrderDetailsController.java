@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.domain.Book;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.OrderDetails;
+import com.example.demo.dto.BookDto;
 import com.example.demo.dto.OrderDetailsDto;
 import com.example.demo.service.BookService;
 import com.example.demo.service.OrderDetailsService;
@@ -28,7 +28,10 @@ public class OrderDetailsController {
       @RequestBody OrderDetailsDto.CreateRequest request) {
 
     Order order = orderService.findById(request.getOrderNo());
-    Book book = bookService.getBookByBookNo(request.getBookNo().intValue()).get();
+    BookDto.Response book = bookService.getBookByBookNo(request.getBookNo().intValue()).orElse(null);
+    if (book == null) {
+      return ResponseEntity.badRequest().build();
+    }
 
     OrderDetails orderDetails = new OrderDetails();
     orderDetails.setBookNo(request.getBookNo());
