@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -32,7 +31,7 @@ public class OrderController {
     order.setOrderDate(new java.sql.Date(System.currentTimeMillis()));
     order.setOrderStatus("ORDER");
     order.setOrderTotal(0L);
-    order.setUsedPoint(0L);
+    order.setUsedPoint(0L); 
     order.setPaymentTotal(0L);
 
     Order savedOrder = orderService.createOrder(order);

@@ -2,11 +2,16 @@ package com.example.demo.service;
 
 import com.example.demo.domain.Order;
 import com.example.demo.domain.OrderDetails;
+import com.example.demo.domain.Member;
+import com.example.demo.dto.OrderDetailViewDto;
 import com.example.demo.repository.OrderDetailsRepository;
+import com.example.demo.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @Transactional(readOnly = true)
@@ -14,6 +19,7 @@ import java.util.List;
 public class OrderDetailsService {
 
   private final OrderDetailsRepository orderDetailsRepository;
+  private final MemberRepository memberRepository;
 
   // 주문 상세 생성
   @Transactional
@@ -54,5 +60,31 @@ public class OrderDetailsService {
     return orderDetailsList.stream()
         .mapToLong(OrderDetails::getPurchaseAmount)
         .sum();
+  }
+
+  // 특정 멤버의 주문 상세 리스트 조회
+  public List<OrderDetails> findByMember(Member member) {
+    return orderDetailsRepository.findByOrder_Member(member);
+  }
+
+  // memberNo로 상세 주문 내역 조회
+  public List<OrderDetails> findByMemberNo(Long memberNo) {
+    Member member = memberRepository.findById(memberNo)
+      .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+    return orderDetailsRepository.findByOrder_Member(member);
+  }
+
+  // memberNo와 페이징을 통한 상세 주문 내역 조회
+  public Page<OrderDetails> findByMemberNo(Long memberNo, Pageable pageable) {
+    Member member = memberRepository.findById(memberNo)
+      .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+    return orderDetailsRepository.findByOrder_Member(member, pageable);
+  }
+
+  // memberNo와 페이징을 통한 상세 주문 내역 조회 (도서명 포함)
+  public Page<OrderDetailViewDto> findOrderDetailViewByMemberNo(Long memberNo, Pageable pageable) {
+    Member member = memberRepository.findById(memberNo)
+      .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+    return orderDetailsRepository.findOrderDetailViewByMember(member, pageable);
   }
 }

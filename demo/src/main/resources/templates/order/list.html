@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>주문 내역 조회</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+  <h2>주문 내역 조회</h2>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>도서명</th>
+        <th>주문일자</th>
+        <th>구매수량</th>
+        <th>금액</th>
+        <th>수령인</th>
+        <th>배송지</th>
+        <th>연락처</th>
+      </tr>
+    </thead>
+    <tbody>
+    <!-- Thymeleaf 반복 예시 -->
+    <tr th:each="detail : ${orderDetailPage.content}">
+      <td th:text="${detail.bookName}"></td>
+      <td th:text="${#dates.format(detail.orderDate, 'yyyy-MM-dd')}"></td>
+      <td th:text="${detail.purchaseQuantity}"></td>
+      <td th:text="${#numbers.formatInteger(detail.purchaseAmount, 0, 'COMMA')}"></td>
+      <td th:text="${detail.receiverName}"></td>
+      <td th:text="${detail.receiverAddr}"></td>
+      <td th:text="${detail.phone}"></td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- 공통 페이징 컴포넌트 사용 -->
+  <div th:replace="components/pagination :: pagination(${orderDetailPage}, '/api/order-details/member/' + ${memberNo} + '/list')"></div>
+</div>
+<script th:inline="javascript">
+  const orderDetailPage = /*[[${orderDetailPage}]]*/ null;
+  console.log(orderDetailPage);
+  </script>
+</body>
+</html>

@@ -13,8 +13,8 @@ public class BookSpecification {
                 predicate = cb.and(predicate, cb.like(root.get("author"), "%" + book.getAuthor() + "%"));
             if (book.getCompany() != null && !book.getCompany().isEmpty())
                 predicate = cb.and(predicate, cb.like(root.get("company"), "%" + book.getCompany() + "%"));
-            if (book.getPrice() != null && !book.getPrice().isEmpty())
-                predicate = cb.and(predicate, cb.equal(root.get("price"), book.getPrice()));
+           // if (book.getPrice() != null && !book.getPrice().isEmpty())
+           //     predicate = cb.and(predicate, cb.equal(root.get("price"), book.getPrice()));
             if (book.getCategory() != null && !book.getCategory().isEmpty())
                 predicate = cb.and(predicate, cb.like(root.get("category"), "%" + book.getCategory() + "%"));
             if (book.getAbout() != null && !book.getAbout().isEmpty())

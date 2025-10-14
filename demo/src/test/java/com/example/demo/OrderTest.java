@@ -1,15 +1,29 @@
 package com.example.demo;
 
+import com.example.demo.domain.Member;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.OrderDetails;
+import com.example.demo.repository.MemberRepository;
+
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import java.sql.Date;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
 public class OrderTest {
+
+    @Autowired
+    MemberRepository memberRepository;
+
     @Test
     public void testAddDetail() {
+
+        Optional<Member> member = memberRepository.findById(1L);
         Order order = new Order();
         order.setReceiverName("테스터");
         order.setReceiverAddr("서울시 강남구");
@@ -19,7 +33,7 @@ public class OrderTest {
         order.setUsedPoint(0L);
         order.setPaymentTotal(10000L);
         order.setPhone("01012345678");
-        order.setMemberNo(1L);
+        order.setMember(member.get());
 
         OrderDetails details = new OrderDetails();
         details.setBookNo(101L);
