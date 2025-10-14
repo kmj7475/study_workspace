@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.domain.Book;
+import com.example.demo.domain.Employee;
 import com.example.demo.dto.BookDto;
 import com.example.demo.repository.BookRepository;
 import com.example.demo.service.BookService;
@@ -35,7 +36,7 @@ public class BookServiceImpl implements BookService {
         dto.setAbout(book.getAbout());
         dto.setImage(book.getImage());
         dto.setIsbn(book.getIsbn());
-        dto.setEmpNo(book.getEmployee().getEmpNo());
+        dto.setEmpNo(book.getEmployee() != null ? book.getEmployee().getEmpNo() : null);
         return dto;
     }
 
@@ -48,8 +49,17 @@ public class BookServiceImpl implements BookService {
         book.setCategory(dto.getCategory());
         book.setAbout(dto.getAbout());
         book.setImage(dto.getImage());
-        book.setIsbn(dto.getIsbn());
-        book.getEmployee().setEmpNo(dto.getEmpNo());
+        book.setIsbn(dto.getIsbn());        
+         /* 
+        //Employee 기능이 완성된 후 변경
+        if (book.getEmployee() != null) {
+            book.getEmployee().setEmpNo(dto.getEmpNo());
+        }else{
+            Employee employee = new Employee();
+            employee.setEmpNo(dto.getEmpNo());
+            book.setEmployee(employee); 
+        }   
+        */
     }
 
     @Override
@@ -63,8 +73,13 @@ public class BookServiceImpl implements BookService {
         book.setCategory(dto.getCategory());
         book.setAbout(dto.getAbout());
         book.setImage(dto.getImage());
-        book.setIsbn(dto.getIsbn());
-        book.getEmployee().setEmpNo(dto.getEmpNo());
+        book.setIsbn(dto.getIsbn());        
+         /* 
+        //Employee 기능이 완성된 후 변경
+        Employee employee = new Employee();
+        employee.setEmpNo(dto.getEmpNo());
+        book.setEmployee(employee); 
+        */
         Book saved = bookRepository.save(book);
         return toResponse(saved);
     }
@@ -98,3 +113,4 @@ public class BookServiceImpl implements BookService {
                 .collect(Collectors.toList());
     }
 }
+

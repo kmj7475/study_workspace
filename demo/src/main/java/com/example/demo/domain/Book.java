@@ -37,8 +37,7 @@ public class Book {
   @Column(length = 100, columnDefinition = "NUMBER(10) DEFAULT 0")
   private Long price;
 
-  @Column(columnDefinition = "DATE DEFAULT SYSDATE")
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  @Column(columnDefinition = "DATE DEFAULT SYSDATE")  
   private Date publishDate;
 
   @Column(length = 100)

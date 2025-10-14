@@ -1,5 +1,7 @@
 package com.example.demo.dto;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Data
@@ -9,6 +11,7 @@ public class BookDto {
     private String author;
     private String company;
     private Long price;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private java.util.Date publishDate;
     private String category;
     private String about;
@@ -19,10 +22,12 @@ public class BookDto {
     // 요청용 DTO
     @Data
     public static class CreateRequest {
+        private Integer bookNo;
         private String bookName;
         private String author;
         private String company;
         private Long price;
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
         private java.util.Date publishDate;
         private String category;
         private String about;
@@ -38,6 +43,7 @@ public class BookDto {
         private String author;
         private String company;
         private Long price;
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
         private java.util.Date publishDate;
         private String category;
         private String about;
@@ -45,13 +51,6 @@ public class BookDto {
         private String isbn;
         private Integer empNo;
     }
-
-    // 삭제용 DTO
-    @Data
-    public static class DeleteRequest {
-        private Integer bookNo;
-    }
-
     // 응답용 DTO
     @Data
     public static class Response {
@@ -60,6 +59,7 @@ public class BookDto {
         private String author;
         private String company;
         private Long price;
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
         private java.util.Date publishDate;
         private String category;
         private String about;
