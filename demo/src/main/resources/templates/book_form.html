@@ -9,10 +9,11 @@
 <body>
 <div class="container mt-5">
   <h2 th:text="${book.bookNo == null} ? '도서 등록' : '도서 수정'"></h2>
-  <form th:action="@{${book.bookNo == null} ? '/books' : '/books/' + ${book.bookNo}}"
+  <form th:action="${book.bookNo == null} ? @{/books} : @{'/books/' + ${book.bookNo}}"
         th:object="${book}" method="post">
     <div th:if="${book.bookNo != null}">
       <input type="hidden" th:field="*{bookNo}" />
+      <input type="hidden" name="_method" value="put"/>
     </div>
     <div class="mb-3">
       <label for="bookName" class="form-label">도서명</label>
@@ -51,12 +52,7 @@
       <input type="text" class="form-control" id="isbn" name="isbn" th:field="*{isbn}" maxlength="50">
     </div>
     <button type="submit" class="btn btn-primary" th:if="${book.bookNo == null}">등록</button>
-    <button type="submit" class="btn btn-warning" th:if="${book.bookNo != null}"
-            th:formaction="@{'/books/' + ${book.bookNo}}"
-            formmethod="post"
-            onclick="event.preventDefault(); this.form.method='put'; this.form.action='/books/' + this.form.bookNo.value; this.form.submit();">
-      수정
-    </button>
+    <button type="submit" class="btn btn-warning" th:unless="${book.bookNo == null}">수정</button>
   </form>
   <a th:href="@{/books}" class="btn btn-secondary mt-3">목록으로</a>
 </div>
