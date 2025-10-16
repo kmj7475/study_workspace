@@ -11,8 +11,6 @@
     <h2 th:text="${employee.empNo} == null ? '직원 등록' : '직원 수정'">직원 등록/수정</h2>
 
     <form th:action="@{/employees/save}" th:object="${employee}" method="post" class="row g-3">
-        <!-- CSRF -->
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
         <!-- empNo (기본키) -->
         <div class="col-md-3">
