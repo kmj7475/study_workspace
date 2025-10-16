@@ -1,27 +1,33 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>도서 상세</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<div class="container mt-5">
     <h1>도서 상세</h1>
-    <div th:if="${book != null}">
-        <p>번호: <span th:text="${book.bookNo}"></span></p>
-        <p>도서명: <span th:text="${book.bookName}"></span></p>
-        <p>저자: <span th:text="${book.author}"></span></p>
-        <p>출판사: <span th:text="${book.company}"></span></p>
-        <p>가격: <span th:text="${book.price}"></span></p>
-        <p>출판일: <span th:text="${book.publishDate}"></span></p>
-        <p>카테고리: <span th:text="${book.category}"></span></p>
-        <p>설명: <span th:text="${book.about}"></span></p>
-        <p>이미지: <span th:text="${book.image}"></span></p>
-        <p>ISBN: <span th:text="${book.isbn}"></span></p>
-        <a th:href="@{'/books/' + ${book.bookNo} + '/edit'}">수정</a>
-        <form th:action="@{'/books/' + ${book.bookNo}}" method="post" th:object="${book}">
-            <input type="hidden" name="_method" value="delete"/>
-            <button type="submit">삭제</button>
-        </form>
+    <div th:if="${book != null}" class="card">
+        <div class="card-body">
+            <p class="card-text"><strong>번호:</strong> <span th:text="${book.bookNo}"></span></p>
+            <p class="card-text"><strong>도서명:</strong> <span th:text="${book.bookName}"></span></p>
+            <p class="card-text"><strong>저자:</strong> <span th:text="${book.author}"></span></p>
+            <p class="card-text"><strong>출판사:</strong> <span th:text="${book.company}"></span></p>
+            <p class="card-text"><strong>가격:</strong> <span th:text="${book.price}"></span></p>
+            <p class="card-text"><strong>출판일:</strong> <span th:text="${book.publishDate}"></span></p>
+            <p class="card-text"><strong>카테고리:</strong> <span th:text="${book.category}"></span></p>
+            <p class="card-text"><strong>설명:</strong> <span th:text="${book.about}"></span></p>
+            <p class="card-text"><strong>이미지:</strong> <span th:text="${book.image}"></span></p>
+            <p class="card-text"><strong>ISBN:</strong> <span th:text="${book.isbn}"></span></p>
+            <a th:href="@{'/books/' + ${book.bookNo} + '/edit'}" class="btn btn-warning">수정</a>
+            <form th:action="@{'/books/' + ${book.bookNo}}" method="post" th:object="${book}" style="display:inline;">
+                <input type="hidden" name="_method" value="delete"/>
+                <button type="submit" class="btn btn-danger">삭제</button>
+            </form>
+        </div>
     </div>
-    <a th:href="@{/books}">목록으로</a>
+    <a th:href="@{/books}" class="btn btn-secondary mt-3">목록으로</a>
+</div>
 </body>
 </html>
