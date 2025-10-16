@@ -3,8 +3,6 @@ package com.example.demo.domain;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,7 +35,7 @@ public class Book {
   @Column(length = 100, columnDefinition = "NUMBER(10) DEFAULT 0")
   private Long price;
 
-  @Column(columnDefinition = "DATE DEFAULT SYSDATE")  
+  @Column(columnDefinition = "DATE DEFAULT SYSDATE")
   private Date publishDate;
 
   @Column(length = 100)
