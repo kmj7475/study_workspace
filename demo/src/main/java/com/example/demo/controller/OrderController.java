@@ -1,78 +1,73 @@
 package com.example.demo.controller;
 
-import com.example.demo.domain.Member;
-import com.example.demo.domain.Order;
 import com.example.demo.dto.OrderDto;
-import com.example.demo.service.MemberService;
 import com.example.demo.service.OrderService;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
-import java.util.List;
+
+
 
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/orders")
 @RequiredArgsConstructor
 public class OrderController {
 
-  private final OrderService orderService;
-  private final MemberService memberService;
+    private final OrderService orderService;
 
-  // 주문 생성
-  @PostMapping
-  public ResponseEntity<OrderDto.Response> createOrder(@RequestBody OrderDto.CreateRequest request) {
-    Member member = memberService.findById(request.getMemberNo());
+    // 회원별 주문 조회 (페이징)
+    @GetMapping("/member/{memberNo}")
+    public ResponseEntity<Page<OrderDto.Response>> getOrdersByMember(
+            @PathVariable Long memberNo,
+            Pageable pageable
+    ) {
+        Page<OrderDto.Response> orders = orderService.findOrdersByMember(memberNo, pageable);
+        return ResponseEntity.ok(orders);
+    }
 
-    Order order = new Order();
-    order.setMember(member);
-    order.setReceiverName(request.getReceiverName());
-    order.setReceiverAddr(request.getReceiverAddr());
-    order.setPhone(request.getPhone());
-    order.setOrderDate(new java.sql.Date(System.currentTimeMillis()));
-    order.setOrderStatus("ORDER");
-    order.setOrderTotal(0L);
-    order.setUsedPoint(0L); 
-    order.setPaymentTotal(0L);
+    // 관리자 전체 주문 조회 (회원번호/날짜 범위 필터)
+    // @GetMapping("/admin")
+    // public ResponseEntity<Page<OrderDto.Response>> getOrdersForAdmin(
+    //         @RequestParam(required = false) Long memberNo,
+    //         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+    //         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+    //         Pageable pageable
+    // ) {
+    //     Page<OrderDto.Response> orders = orderService.findOrdersForAdmin(memberNo, startDate, endDate, pageable);
+    //     return ResponseEntity.ok(orders);
+    // }
 
-    Order savedOrder = orderService.createOrder(order);
-    return ResponseEntity.ok(convertToResponse(savedOrder));
-  }
+    // 주문 등록 (Order + OrderDetails 포함)
+    @PostMapping
+    public ResponseEntity<OrderDto.Response> createOrder(@RequestBody OrderDto.CreateRequest dto) {
+        return ResponseEntity.ok(OrderDto.Response.fromEntity(orderService.createOrder(dto)));
+    }
 
-  // 주문 목록 조회
-  @GetMapping
-  public ResponseEntity<List<OrderDto.Response>> getAllOrders() {
-    List<Order> orders = orderService.findAll();
-    List<OrderDto.Response> responses = orders.stream()
-        .map(this::convertToResponse)
-        .toList();
-    return ResponseEntity.ok(responses);
-  }
+    // 주문 수정 (Order + OrderDetails 포함)
+    @PutMapping("/{orderNo}")
+    public ResponseEntity<OrderDto.Response> updateOrder(
+            @PathVariable Long orderNo,
+            @RequestBody OrderDto.UpdateRequest dto
+    ) {
+        return ResponseEntity.ok(OrderDto.Response.fromEntity(orderService.updateOrder(orderNo, dto)));
+    }
 
-  // 주문 조회
-  @GetMapping("/{orderNo}")
-  public ResponseEntity<OrderDto.Response> getOrder(@PathVariable Long orderNo) {
-    Order order = orderService.findById(orderNo);
-    return ResponseEntity.ok(convertToResponse(order));
-  }
+    // 주문 삭제
+    @DeleteMapping("/{orderNo}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long orderNo) {
+        orderService.deleteOrder(orderNo);
+        return ResponseEntity.noContent().build();
+    }
 
-  // 주문 삭제
-  @DeleteMapping("/{orderNo}")
-  public ResponseEntity<Void> deleteOrder(@PathVariable Long orderNo) {
-    orderService.deleteOrder(orderNo);
-    return ResponseEntity.ok().build();
-  }
-
-  // Entity -> Response DTO 변환
-  private OrderDto.Response convertToResponse(Order order) {
-    OrderDto.Response response = new OrderDto.Response();
-    response.setOrderNo(order.getOrderNo());
-    response.setMemberNo(order.getMember().getMemberNo());
-    response.setReceiverName(order.getReceiverName());
-    response.setReceiverAddr(order.getReceiverAddr());
-    response.setPhone(order.getPhone());
-    response.setTotalAmount(order.getOrderTotal());
-    response.setOrderStatus(order.getOrderStatus());
-    // 총 금액 등 필요한 정보 설정
-    return response;
-  }
+    // 단건 조회
+    @GetMapping("/{orderNo}")
+    public ResponseEntity<OrderDto.Response> getOrder(@PathVariable Long orderNo) {
+        return orderService.findById(orderNo)
+                .map(OrderDto.Response::fromEntity)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
