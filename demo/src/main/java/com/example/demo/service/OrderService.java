@@ -1,27 +1,32 @@
 package com.example.demo.service;
 
 import com.example.demo.domain.Order;
-import com.example.demo.dto.OrderDto;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 
 public interface OrderService {
 
-    // 단건 조회
-    Optional<Order> findById(Long orderNo);
+  // 등록
+  Order createOrder(Order order);
 
-    // 회원별 주문 조회 (페이징)
-    Page<OrderDto.Response> findOrdersByMember(Long memberNo, Pageable pageable);
+  // 수정
+  Order updateOrder(Long orderNo, Order order);
 
-    // 등록 (Order + OrderDetails 포함)
-    Order createOrder(OrderDto.CreateRequest dto);
+  // 삭제
+  void deleteOrder(Long orderNo);
 
-    // 수정 (Order + OrderDetails 포함)
-    Order updateOrder(Long orderNo, OrderDto.UpdateRequest dto);
+  // 단건 조회
+  Optional<Order> findById(Long orderNo);
 
-    // 삭제 (Order + OrderDetails 포함)
-    void deleteOrder(Long orderNo);
+  // 회원별 주문내역 조회 (페이징 X)
+  List<Order> findByMemberNo(Long memberNo);
+
+  // 관리자용 전체 조회 (날짜 + 회원번호 조건)
+  Page<Order> searchOrders(Long memberNo, LocalDate startDate, LocalDate endDate, Pageable pageable);
 }

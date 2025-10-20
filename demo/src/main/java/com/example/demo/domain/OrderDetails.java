@@ -13,6 +13,7 @@ import lombok.Data;
 @Data
 @Entity(name = "order_details")
 public class OrderDetails {
+  
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "order_item_no", length = 6, nullable = false)
@@ -20,7 +21,7 @@ public class OrderDetails {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "book_no" , nullable = false)
-  private Book book; // 책고유번호
+  private Book book; // 주문도서
 
   @Column(name = "purchase_quantity", precision = 10, scale = 0)
   private Long purchaseQuantity; // 구매수량
@@ -33,5 +34,5 @@ public class OrderDetails {
 
   @ManyToOne
   @JoinColumn(name = "order_no", nullable = false)
-  private Order order;
+  private Order order;    //주문 헤더
 }

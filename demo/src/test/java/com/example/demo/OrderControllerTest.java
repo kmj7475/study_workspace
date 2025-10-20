@@ -2,21 +2,33 @@ package com.example.demo;
 
 
 import com.example.demo.domain.Member;
-import com.example.demo.dto.OrderDetailsDto;
+import com.example.demo.domain.Order;
 import com.example.demo.dto.OrderDto;
+import com.example.demo.repository.BookRepository;
+import com.example.demo.repository.MemberRepository;
+import com.example.demo.service.OrderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
-
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -25,121 +37,94 @@ public class OrderControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @MockBean
+    private OrderService orderService;
+
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private com.example.demo.repository.MemberRepository memberRepository;
-
-    @Autowired
-    private com.example.demo.repository.BookRepository bookRepository;
-
+    private OrderDto.CreateRequest createRequest;
+    private Order order;
     private Member testMember;
-    private com.example.demo.domain.Book testBook;
 
-    // @BeforeEach
-    // void setup() {
-    //     testMember = memberRepository.findById(1000L).orElseThrow();
-    //     testBook = bookRepository.findById(1).orElseThrow();
-    // }
+    MemberRepository memberRepository;
+    BookRepository bookRepository;
 
-    // @Test
-    // void testCreateOrder() throws Exception {
-    //     OrderDto.CreateRequest createDto = new OrderDto.CreateRequest();
-    //     createDto.setMemberNo(testMember.getMemberNo());
-    //     createDto.setReceiverName("홍길동");
-    //     createDto.setReceiverAddr("서울시 강남구");
-    //     createDto.setOrderStatus("주문완료");
-    //     createDto.setOrderTotal(10000L);
-    //     createDto.setUsedPoint(0L);
-    //     createDto.setPaymentTotal(10000L);
-    //     createDto.setPhone("010-1234-5678");
+    @BeforeEach
+    void setup() {
+        testMember = memberRepository.findById(1051L).orElseThrow();
 
-    //     OrderDetailsDto.CreateRequest detailDto = new OrderDetailsDto.CreateRequest();
-    //     detailDto.setBookNo(testBook.getBookNo());
-    //     detailDto.setPurchaseQuantity(1L);
+        createRequest = new OrderDto.CreateRequest();
+        createRequest.setMemberNo(testMember.getMemberNo());
+        createRequest.setReceiverAddr("서울시 강남구");
+        //createRequest.setOrderDate(LocalDate.now());
+        createRequest.setOrderDetailsList(List.of()); // 상세는 빈 리스트
 
-    //     createDto.setOrderDetailsList(List.of(detailDto));
+        order = new Order();
+        order.setOrderNo(100L);
+        order.setMember(testMember);
+        order.setReceiverAddr(createRequest.getReceiverAddr());
+        order.setOrderStatus("완료");
+    }
 
-    //     mockMvc.perform(post("/orders")
-    //                     .contentType(MediaType.APPLICATION_JSON)
-    //                     .content(objectMapper.writeValueAsString(createDto)))
-    //             .andExpect(status().isOk())
-    //             .andExpect(jsonPath("$.receiverName").value("홍길동"))
-    //             .andExpect(jsonPath("$.orderDetailsList[0].bookNo").value(testBook.getBookNo()));
-    // }
+  // ================= CREATE =================
+  @Test
+  void testCreateOrder() throws Exception {
+      Mockito.when(orderService.createOrder(any(Order.class))).thenReturn(order);
 
-    // @Test
-    // void testUpdateOrder() throws Exception {
-    //     // 먼저 주문 생성
-    //     OrderDto.CreateRequest createDto = new OrderDto.CreateRequest();
-    //     createDto.setMemberNo(testMember.getMemberNo());
-    //     createDto.setReceiverName("홍길동");
-    //     createDto.setReceiverAddr("서울시 강남구");
-    //     createDto.setOrderStatus("주문완료");
-    //     createDto.setOrderTotal(10000l);
-    //     createDto.setUsedPoint(0L);
-    //     createDto.setPaymentTotal(10000l);
-    //     createDto.setPhone("010-1234-5678");
+      mockMvc.perform(post("/orders")
+                      .contentType(MediaType.APPLICATION_JSON)
+                      .content(objectMapper.writeValueAsString(createRequest)))
+              .andExpect(status().isOk())
+              .andExpect(jsonPath("$.orderNo").value(order.getOrderNo()))
+              .andExpect(jsonPath("$.receiverAddr").value(order.getReceiverAddr()));
 
-    //     OrderDetailsDto.CreateRequest detailDto = new OrderDetailsDto.CreateRequest();
-    //     detailDto.setBookNo(testBook.getBookNo());
-    //     detailDto.setPurchaseQuantity(1L);
-    //     createDto.setOrderDetailsList(List.of(detailDto));
+      // DTO → Entity 변환 확인
+      ArgumentCaptor<Order> captor = ArgumentCaptor.forClass(Order.class);
+      Mockito.verify(orderService, times(1)).createOrder(captor.capture());
+      Order captured = captor.getValue();
+      assertThat(captured.getReceiverAddr()).isEqualTo(createRequest.getReceiverAddr());
+  }
 
-    //     String result = mockMvc.perform(post("/orders")
-    //                     .contentType(MediaType.APPLICATION_JSON)
-    //                     .content(objectMapper.writeValueAsString(createDto)))
-    //             .andReturn().getResponse().getContentAsString();
+  // ================= READ =================
+  @Test
+  void testGetOrderById() throws Exception {
+      Mockito.when(orderService.findById(100L)).thenReturn(Optional.of(order));
 
-    //     Long orderNo = objectMapper.readTree(result).get("orderNo").asLong();
+      mockMvc.perform(get("/orders/100"))
+              .andExpect(status().isOk())
+              .andExpect(jsonPath("$.orderNo").value(order.getOrderNo()))
+              .andExpect(jsonPath("$.shippingAddress").value(order.getReceiverAddr()));
+  }
 
-    //     // 수정 DTO
-    //     OrderDto.UpdateRequest updateDto = new OrderDto.UpdateRequest();
-    //     updateDto.setReceiverName("김철수");
-    //     updateDto.setReceiverAddr("서울시 서초구");
-    //     updateDto.setOrderStatus("배송중");
-    //     updateDto.setOrderTotal(10000l);
-    //     updateDto.setUsedPoint(0l);
-    //     updateDto.setPaymentTotal(10000l);
-    //     updateDto.setPhone("010-9876-5432");
+  // ================= UPDATE =================
+//   @Test
+//   void testUpdateOrder() throws Exception {
+//       OrderDto.UpdateRequest updateRequest = new OrderDto.UpdateRequest();
+//       updateRequest.getReceiverAddr("서울시 서초구");
 
-    //     mockMvc.perform(put("/orders/{orderNo}", orderNo)
-    //                     .contentType(MediaType.APPLICATION_JSON)
-    //                     .content(objectMapper.writeValueAsString(updateDto)))
-    //             .andExpect(status().isOk())
-    //             .andExpect(jsonPath("$.receiverName").value("김철수"))
-    //             .andExpect(jsonPath("$.orderStatus").value("배송중"));
-    // }
+//       Mockito.when(orderService.updateOrder(eq(100L), any(OrderDto.UpdateRequest.class)))
+//              .thenReturn(order);
 
-    // @Test
-    // void testDeleteOrder() throws Exception {
-    //     // 주문 생성
-    //     OrderDto.CreateRequest createDto = new OrderDto.CreateRequest();
-    //     createDto.setMemberNo(testMember.getMemberNo());
-    //     createDto.setReceiverName("홍길동");
-    //     createDto.setReceiverAddr("서울시 강남구");
-    //     createDto.setOrderStatus("주문완료");
-    //     createDto.setOrderTotal(10000l);
-    //     createDto.setUsedPoint(0l);
-    //     createDto.setPaymentTotal(10000l);
-    //     createDto.setPhone("010-1234-5678");
+//       mockMvc.perform(put("/orders/100")
+//                       .contentType(MediaType.APPLICATION_JSON)
+//                       .content(objectMapper.writeValueAsString(updateRequest)))
+//               .andExpect(status().isOk())
+//               .andExpect(jsonPath("$.orderNo").value(order.getOrderNo()));
 
-    //     String result = mockMvc.perform(post("/orders")
-    //                     .contentType(MediaType.APPLICATION_JSON)
-    //                     .content(objectMapper.writeValueAsString(createDto)))
-    //             .andReturn().getResponse().getContentAsString();
+//       ArgumentCaptor<OrderDto.UpdateRequest> captor = ArgumentCaptor.forClass(OrderDto.UpdateRequest.class);
+//     //  Mockito.verify(orderService, times(1)).updateOrder(eq(100L), captor.capture());
+//       assertThat(captor.getValue().getReceiverAddr()).isEqualTo(updateRequest.getReceiverAddr());
+//   }
 
-    //     Long orderNo = objectMapper.readTree(result).get("orderNo").asLong();
+  // ================= DELETE =================
+  @Test
+  void testDeleteOrder() throws Exception {
+      Mockito.doNothing().when(orderService).deleteOrder(100L);
 
-    //     // 삭제
-    //     mockMvc.perform(delete("/orders/{orderNo}", orderNo))
-    //             .andExpect(status().isNoContent());
-    // }
+      mockMvc.perform(delete("/orders/100"))
+              .andExpect(status().isOk());
 
-    // @Test
-    // void testGetOrdersByMember() throws Exception {
-    //     mockMvc.perform(get("/orders/member/{memberNo}", testMember.getMemberNo()))
-    //             .andExpect(status().isOk());
-    // }
+      Mockito.verify(orderService, times(1)).deleteOrder(100L);
+  }
 }

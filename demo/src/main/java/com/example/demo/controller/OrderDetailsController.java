@@ -1,22 +1,17 @@
 package com.example.demo.controller;
 
 
-import com.example.demo.domain.OrderDetails;
-import com.example.demo.dto.OrderDetailsDto;
-import com.example.demo.service.OrderDetailsService;
-
 
 import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Controller;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+
+
 
 @RestController
 @RequestMapping("/order-details")
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class OrderDetailsController {
 
-    private final OrderDetailsService orderDetailsService;
+  //  private final OrderDetailsService orderDetailsService;
 
     // // 주문 상세 단건 조회
     // @GetMapping("/{orderItemNo}")

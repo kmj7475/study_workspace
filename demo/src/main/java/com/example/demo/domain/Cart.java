@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
 
@@ -17,11 +18,11 @@ public class Cart {
   @Column(name = "cart_no", nullable = false)
   private Long cartNo; // 장바구니번호
 
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name = "member_no", referencedColumnName = "member_no", nullable = false)
   private Member member; // 회원
 
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name = "book_no", referencedColumnName = "book_no", nullable = false)
   private Book book; // 책
 

@@ -1,6 +1,6 @@
 package com.example.demo.domain;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -24,35 +24,44 @@ import lombok.Data;
 @Entity
 @Table(name = "orders")
 public class Order {
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "order_no")
-  private Long orderNo;
+  private Long orderNo; //주문번호
 
+  @Column(length = 20, nullable = false)
+  private Date orderDate; //주문일자
+  
+  @Column(length = 10, nullable = false)
+  private String orderStatus; //주문상태
+  
+  @Column(length = 10, nullable = false)
+  private long orderTotal;  //합계
+  
+  @Column(length = 10, nullable = false)
+  private long usedPoint;   //포인트 결제
+  
+  @Column(length = 10, nullable = false)
+  private long paymentTotal;  //주문금액 ( 합계 - 포인트)
+  
   @Column(length = 100, nullable = false)
-  private String receiverName;
+  private String receiverName;  //받는사람 이름
+
   @Column(length = 100, nullable = false, unique = true)
-  private String receiverAddr;
-  @Column(length = 20, nullable = false)
-  private Date orderDate;
-  @Column(length = 10, nullable = false)
-  private String orderStatus;
-  @Column(length = 10, nullable = false)
-  private long orderTotal;
-  @Column(length = 10, nullable = false)
-  private long usedPoint;
-  @Column(length = 10, nullable = false)
-  private long paymentTotal;
-  @Column(length = 20, nullable = false)
-  private String phone;
+  private String receiverAddr; //받는사람 주소
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @Column(length = 20, nullable = false)
+  private String phone;   //받는사람 전화번호
+    
+
   @JsonBackReference
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_no", nullable = false)
-  private Member member;
+  private Member member;  // 주문회원
 
-  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<OrderDetails> orderDetailsList = new ArrayList<>();
+  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true) 
+  private List<OrderDetails> orderDetailsList = new ArrayList<>(); //주문상세 목록
 
   public void addDetail(OrderDetails detail) {
     orderDetailsList.add(detail);
