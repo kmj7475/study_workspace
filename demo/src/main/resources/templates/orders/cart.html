@@ -12,38 +12,16 @@
             document.querySelectorAll('.item-amount').forEach(function(td) {
                 total += parseInt(td.innerText);
             });
-            const point = parseInt(document.getElementById('usePoint').value) || 0;
-            let finalTotal = total - point;
-            if (finalTotal < 0) finalTotal = 0;
-            document.getElementById('totalAmount').innerText = finalTotal;
+            
+            document.getElementById('totalAmount').innerText = total;
         }
     </script>
 </head>
 <body>
 <div class="container my-5">
-    <h2 class="mb-4">🛒 장바구니 주문</h2>
+<h2 class="mb-4">🛒 장바구니 주문</h2>
 
-    <!-- 배송지 정보 -->
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">배송 정보</div>
-        <div class="card-body">
-            <form id="orderForm" th:action="@{/orders}" method="post">
-                <div class="mb-3">
-                    <label class="form-label">이름</label>
-                    <input type="text" class="form-control" name="receiverName" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">주소</label>
-                    <input type="text" class="form-control" name="receiverAddr" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">전화번호</label>
-                    <input type="tel" class="form-control" name="phone" required>
-                </div>
-            </form>
-        </div>
-    </div>
-
+<form action="/orders" method="get">
     <!-- 주문 도서 리스트 -->
     <div class="card mb-4">
         <div class="card-header bg-secondary text-white">주문 도서</div>
@@ -76,18 +54,16 @@
     <!-- 총 금액 / 포인트 -->
     <div class="card mb-4">
         <div class="card-body d-flex justify-content-between align-items-center">
-            <div>
-                <label class="form-label me-2">포인트 사용:</label>
-                <input type="number" id="usePoint" class="form-control d-inline-block" style="width:120px" value="0" oninput="updateTotal()">
-            </div>
+
             <h4>총 금액: <span id="totalAmount" th:text="${totalAmount}">0</span> 원</h4>
         </div>
     </div>
 
     <!-- 주문 버튼 -->
-    <div class="text-end">
-        <button type="submit" class="btn btn-success btn-lg" form="orderForm">주문하기</button>
+    <div class="text-end"> 
+        <button type="submit" class="btn btn-success btn-lg" >주문하기</button>
     </div>
+</form>
 </div>
 
 <!-- Bootstrap JS Bundle -->
