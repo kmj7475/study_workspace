@@ -15,6 +15,8 @@ import java.util.Optional;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
+    public static final String REDIRECT_EMPLOYEE_LIST = "redirect:/employees";
+    public static final String SUCESS_MESSAGE = "successMessage";
 
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
@@ -51,7 +53,7 @@ public class EmployeeController {
             return "employee_form";
         } else {
             ra.addFlashAttribute("errorMessage", "해당 직원이 존재하지 않습니다: " + empNo);
-            return "redirect:/employees";
+            return REDIRECT_EMPLOYEE_LIST;
         }
     }
 
@@ -69,8 +71,8 @@ public class EmployeeController {
     @PostMapping("/save")
     public String save(@ModelAttribute Employee employee, RedirectAttributes ra) {
         Employee saved = employeeService.createEmployee(employee);
-        ra.addFlashAttribute("successMessage", "등록되었습니다: " + saved.getEmpNo());
-        return "redirect:/employees";
+        ra.addFlashAttribute(SUCESS_MESSAGE, "등록되었습니다: " + saved.getEmpNo());
+        return REDIRECT_EMPLOYEE_LIST;
     }
 
     /**
@@ -79,8 +81,8 @@ public class EmployeeController {
     @PostMapping("/update")
     public String update(@ModelAttribute Employee employee, RedirectAttributes ra) {
         Employee updated = employeeService.updateEmployee(employee);
-        ra.addFlashAttribute("successMessage", "수정되었습니다: " + updated.getEmpNo());
-        return "redirect:/employees";
+        ra.addFlashAttribute(SUCESS_MESSAGE, "수정되었습니다: " + updated.getEmpNo());
+        return REDIRECT_EMPLOYEE_LIST;
     }
 
     /**
@@ -89,7 +91,7 @@ public class EmployeeController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Integer empNo, RedirectAttributes ra) {
         employeeService.removeEmployeeById(empNo);
-        ra.addFlashAttribute("successMessage", "삭제되었습니다: " + empNo);
-        return "redirect:/employees";
+        ra.addFlashAttribute(SUCESS_MESSAGE, "삭제되었습니다: " + empNo);
+        return REDIRECT_EMPLOYEE_LIST;
     }
 }

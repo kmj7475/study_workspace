@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8"/>
     <title th:text="${employee.empNo} == null ? '직원 등록' : '직원 수정'">직원 폼</title>
@@ -25,6 +25,34 @@
             <label for="empName" class="form-label">이름 (empName)</label>
             <input type="text" id="empName" class="form-control" th:field="*{empName}" placeholder="이름을 입력하세요"/>
             <div class="text-danger small" th:if="${#fields.hasErrors('empName')}" th:errors="*{empName}"></div>
+        </div>
+
+        <!-- 이메일 -->
+        <div class="col-md-6">
+            <label for="email" class="form-label">이메일</label>
+            <input type="email" id="email" class="form-control" th:field="*{email}" placeholder="example@domain.com"/>
+            <div class="text-danger small" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        </div>
+
+        <!-- 전화번호 -->
+        <div class="col-md-4">
+            <label for="phoneNumber" class="form-label">전화번호</label>
+            <input type="text" id="phoneNumber" class="form-control" th:field="*{phoneNumber}" placeholder="010-1234-5678"/>
+            <div class="text-danger small" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
+        </div>
+
+        <!-- 입사일 -->
+        <div class="col-md-3">
+            <label for="hireDate" class="form-label">입사일</label>
+            <input type="date" id="hireDate" class="form-control" th:field="*{hireDate}" />
+            <div class="text-danger small" th:if="${#fields.hasErrors('hireDate')}" th:errors="*{hireDate}"></div>
+        </div>
+
+        <!-- 연봉 -->
+        <div class="col-md-3">
+            <label for="salary" class="form-label">연봉</label>
+            <input type="number" id="salary" class="form-control" th:field="*{salary}" step="1000" min="0" placeholder="예: 30000000"/>
+            <div class="text-danger small" th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}"></div>
         </div>
 
         <!-- 버튼 -->

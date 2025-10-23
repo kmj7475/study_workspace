@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8"/>
     <title>직원 목록</title>
@@ -34,6 +34,10 @@
                 <tr>
                     <th>사원번호</th>
                     <th>이름</th>
+                    <th>이메일</th>
+                    <th>전화번호</th>
+                    <th>입사일</th>
+                    <th class="text-end">연봉</th>
                     <th>담당 도서</th>
                     <th>액션</th>
                 </tr>
@@ -42,6 +46,18 @@
                 <tr th:each="emp : ${employees}">
                     <td th:text="${emp.empNo}">100</td>
                     <td th:text="${emp.empName}">홍길동</td>
+
+                    <!-- 이메일 -->
+                    <td th:text="${emp.email != null ? emp.email : '-'}">example@domain.com</td>
+
+                    <!-- 전화번호 -->
+                    <td th:text="${emp.phoneNumber != null ? emp.phoneNumber : '-'}">010-1234-5678</td>
+
+                    <!-- 입사일 포맷 -->
+                    <td th:text="${emp.hireDate != null ? #dates.format(emp.hireDate,'yyyy-MM-dd') : '-'}">2025-01-01</td>
+
+                    <!-- 연봉 포맷(숫자) -->
+                    <td class="text-end" th:text="${emp.salary != null ? #numbers.formatInteger(emp.salary) : '-'}">30000000</td>
 
                     <!-- 담당 도서: emp.books 컬렉션을 가정 -->
                     <td>
