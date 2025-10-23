@@ -22,8 +22,8 @@
         </div>
         <div class="col-auto">
             <button type="submit" class="btn btn-primary">검색</button>
-            <a th:href="@{employees}" class="btn btn-outline-secondary ms-2">초기화</a>
-            <a th:href="@{employees/new}" class="btn btn-success ms-2">신규 등록</a>
+            <a th:href="@{/employees}" class="btn btn-outline-secondary ms-2">초기화</a>
+            <a th:href="@{/employees/new}" class="btn btn-success ms-2">신규 등록</a>
         </div>
     </form>
 
@@ -37,7 +37,7 @@
                     <th>이메일</th>
                     <th>전화번호</th>
                     <th>입사일</th>
-                    <th class="text-end">연봉</th>
+                    <th class="text-end">급여</th>
                     <th>담당 도서</th>
                     <th>액션</th>
                 </tr>
@@ -56,8 +56,8 @@
                     <!-- 입사일 포맷 -->
                     <td th:text="${emp.hireDate != null ? #dates.format(emp.hireDate,'yyyy-MM-dd') : '-'}">2025-01-01</td>
 
-                    <!-- 연봉 포맷(숫자) -->
-                    <td class="text-end" th:text="${emp.salary != null ? #numbers.formatInteger(emp.salary) : '-'}">30000000</td>
+                    <!-- 급여 포맷(숫자) -->
+                    <td class="text-end" th:text="${emp.salary != null ? emp.salary : '-'}">30000000</td>
 
                     <!-- 담당 도서: emp.books 컬렉션을 가정 -->
                     <td>

@@ -13,7 +13,7 @@
     <form th:action="@{/employees/save}" th:object="${employee}" method="post" class="row g-3">
 
         <!-- empNo (기본키) -->
-        <div class="col-md-3">
+        <div class="col-md-5">
             <label for="empNo" class="form-label">사원번호 (empNo)</label>
             <input type="number" id="empNo" class="form-control" th:field="*{empNo}"
                    th:readonly="${employee.empNo != null}" />
@@ -21,35 +21,35 @@
         </div>
 
         <!-- empName -->
-        <div class="col-md-6">
+        <div class="col-md-5">
             <label for="empName" class="form-label">이름 (empName)</label>
             <input type="text" id="empName" class="form-control" th:field="*{empName}" placeholder="이름을 입력하세요"/>
             <div class="text-danger small" th:if="${#fields.hasErrors('empName')}" th:errors="*{empName}"></div>
         </div>
 
         <!-- 이메일 -->
-        <div class="col-md-6">
+        <div class="col-md-5">
             <label for="email" class="form-label">이메일</label>
             <input type="email" id="email" class="form-control" th:field="*{email}" placeholder="example@domain.com"/>
             <div class="text-danger small" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
         </div>
 
         <!-- 전화번호 -->
-        <div class="col-md-4">
+        <div class="col-md-5">
             <label for="phoneNumber" class="form-label">전화번호</label>
             <input type="text" id="phoneNumber" class="form-control" th:field="*{phoneNumber}" placeholder="010-1234-5678"/>
             <div class="text-danger small" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
         </div>
 
         <!-- 입사일 -->
-        <div class="col-md-3">
+        <div class="col-md-5">
             <label for="hireDate" class="form-label">입사일</label>
             <input type="date" id="hireDate" class="form-control" th:field="*{hireDate}" />
             <div class="text-danger small" th:if="${#fields.hasErrors('hireDate')}" th:errors="*{hireDate}"></div>
         </div>
 
         <!-- 연봉 -->
-        <div class="col-md-3">
+        <div class="col-md-5">
             <label for="salary" class="form-label">연봉</label>
             <input type="number" id="salary" class="form-control" th:field="*{salary}" step="1000" min="0" placeholder="예: 30000000"/>
             <div class="text-danger small" th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}"></div>

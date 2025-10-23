@@ -1,6 +1,9 @@
 package com.example.demo.domain;
 
 import java.util.List;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,6 +40,7 @@ public class Employee {
 
     @Temporal(TemporalType.DATE)
     @Column(name = "hire_date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date hireDate;
 
     @Column
